@@ -1,6 +1,6 @@
 # Introducing
 
-## That's my script for installing software for a recently installed fedora linux.
+## That's my script for ruby-developers which installing software for a recently installed fedora linux.
 
 1. Uninstall "Softwares"
 2. Remove packages which sends data to fedora or another things
