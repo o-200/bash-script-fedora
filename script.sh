@@ -1,60 +1,41 @@
 #!/bin/bash
 
-# update and remove unusable soft
 dnf update
 
-dnf remove abrt
-dnf remove PackageKit gnome-software
 systemctl disable libvirtd
 systemctl --user mask evolution-addressbook-factory evolution-calendar-factory evolution-source-registry
-dnf remove kde-connect kdeconnectd
-dnf remove krdc dragon kontact ktorrent kget konversation konqueror falkon kmail krusader krfb akregator juk kamoso k3b calligra\* kfind kgpg kmouth kmag
-
-# terminal
-dnf install -y kitty
-
-# zsh, ohmyzsh
-dnf install -y zsh
-touch ~/.zshrc
-chsh -s $(which zsh)
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+dnf remove -y abrt PackageKit gnome-software kde-connect kdeconnectd krdc dragon kontact ktorrent kget konversation konqueror falkon kmail krusader krfb akregator juk kamoso k3b calligra\* kfind kgpg kmouth kmag
 
 # ruby/rails dependencies
-dnf install -y perl-core
-dnf install -y libyaml-devel
-dnf install -y openssl-devel
+dnf install -y perl-core libyaml-devel openssl-devel ruby-devel zlib-devel
 dnf group install -y "C Development Tools and Libraries"
-dnf install -y ruby-devel zlib-devel
 
-# asdf
+# asdf for bash
 dnf install -y curl git
 git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.14.0
-cat << EOF > ~/.zshrc
-. "$HOME/.asdf/asdf.sh"
-EOF
+echo ". "$HOME/.asdf/asdf.sh"" >> .bashrc
+echo ". "$HOME/.asdf/completions/asdf.bash"" >> .bashrc
 
 # nodejs
 asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git
-asdf install -y nodejs latest
+asdf install nodejs latest
 asdf global nodejs latest
 
 # ruby
 asdf plugin add ruby https://github.com/asdf-vm/asdf-ruby.git
-ASDF_RUBY_BUILD_VERSION=master asdf install ruby 3.3.0
+asdf install ruby latest
 asdf global ruby latest
 
 # basic gems
-gem install bundler
-gem install pry
+gem install bundler pry
 gem update --system 3.5.9
 
 
 # postman
-
+# FOR FEDORA that way is only correct
 wget https://dl.pstmn.io/download/latest/linux64 -O postman-linux-x64.tar.gz
 tar xvzf postman-linux-x64.tar.gz -C /opt
 ln -s /opt/Postman/Postman /usr/bin/postman
-
 cat << EOF > ~/.local/share/applications/postman2.desktop
 [Desktop Entry]
 Name=Postman
@@ -77,6 +58,7 @@ dnf install https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-rel
 dnf install discord
 
 # rubymine
+# install using vpn, proxy
 flatpak install -y flathub com.jetbrains.RubyMine
 
 #docker
